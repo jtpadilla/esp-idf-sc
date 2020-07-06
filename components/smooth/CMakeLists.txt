@@ -37,7 +37,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
 )
 
 set(COMPONENT_REQUIRES
-    nvs_flash sdmmc vfs fatfs pthread mbedtls fmt nlohmann_json
+    nvs_flash sdmmc vfs fatfs pthread libsodium mbedtls fmt nlohmann_json
 )
 
 register_component()
