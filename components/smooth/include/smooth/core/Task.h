@@ -1,20 +1,3 @@
-/*
-Smooth - A C++ framework for embedded programming on top of Espressif's ESP-IDF
-Copyright 2019 Per Malmberg (https://gitbub.com/PerMalmberg)
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 #pragma once
 
 #include <string>
@@ -23,7 +6,7 @@ limitations under the License.
 #include <map>
 #include <mutex>
 #include <condition_variable>
-
+#include <atomic>
 #include <thread>
 
 #include "smooth/core/ipc/ITaskEventQueue.h"
@@ -31,9 +14,7 @@ limitations under the License.
 #include "smooth/core/ipc/QueueNotification.h"
 #include "smooth/core/ipc/Queue.h"
 #include "smooth/core/timer/ElapsedTime.h"
-#include <atomic>
 
-#ifdef ESP_PLATFORM
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -43,22 +24,19 @@ limitations under the License.
 #if CONFIG_FREERTOS_HZ < 1000
 #error "Smooth requires CONFIG_FREERTOS_HZ at 1000Hz for proper functionality (spec. timers)"
 #endif
-#else
-const int tskNO_AFFINITY = std::numeric_limits<int>::max();
-#endif
 
 namespace smooth::core
 {
-    /// The Task class encapsulates management and execution of a task.
-    /// The intent is to provide the scaffolding needed by nearly every task in an
-    /// embedded system; an initialization method, a periodically called tick(),
-    /// the ability to receive events in a thread-safe manner.
+    /// La clase Task encapsula la gestión y ejecución de una tarea.
+    /// La intención es proporcionar el andamiaje necesario para casi todas las tareas en un
+    /// sistema embebido; un método de inicialización, uno llamado periódicamente tick(),
+    /// la capacidad de recibir eventos de manera segura para subprocesos.
     class Task
     {
         public:
             virtual ~Task();
 
-            /// Starts the task.
+            /// Empieza la tarea
             void start();
 
             void register_queue_with_task(smooth::core::ipc::ITaskEventQueue* task_queue);
@@ -76,33 +54,32 @@ namespace smooth::core
             Task& operator=(Task&&) = delete;
 
         protected:
-            /// Use this constructor to attach to an existing task, i.e. the main task.
-            /// \param task_to_attach_to The task to attach to.
-            /// \param priority Task priority
-            /// \param tick_interval Tick interval
+            // Usa este constructor para unirse a una terea existente (ej: la terea principal)
+            /// \param priority Prioridad de la tarea
+            /// \param tick_interval Intervaloe del Tick
             Task(uint32_t priority, std::chrono::milliseconds tick_interval);
 
-            /// Use this constructor when creating your own task.
-            /// \param task_name Name of task.
-            /// \param stack_size Tack size, in bytes.
-            /// \param priority Task priority
-            /// \param tick_interval Tick interval
-            /// \param core Core affinity, defaults to no affinity
+            /// Usa este metodo para crear tu propia tarea.
+            /// \param task_name Nombre de la tarea.
+            /// \param stack_size Dimension del stack en bytes.
+            /// \param priority Prioridad de la tarea
+            /// \param tick_interval Intervalo del tick
+            /// \param core Afinidad del core del procesados, por defecto sin afinidad.
             Task(std::string task_name,
                  uint32_t stack_size,
                  uint32_t priority,
                  std::chrono::milliseconds tick_interval,
                  int core = tskNO_AFFINITY);
 
-            /// The tick() method is where the task shall perform its work.
-            /// It is called every 'tick_interval' when there no events available.
-            /// Note that if there is a constant stream of event received via a TaskEventQueue,
-            /// the tick may be delayed (depending on the tick_interval).
+            /// El metodo tick() es donde la tarea deberia de realizar su trabajo.
+            /// Este metodo es llamado cada 'tick_interval' cuando no hay eventos disponibles.
+            /// Hay que tener en cuenta que si un flujo constante de eventos es recibido a traves
+            /// de TaskEventQueue, el tick sera retrasado (dependeiendo del tick_interval).
             virtual void tick()
             {
             }
 
-            /// Called once when task is started.
+            /// Llamado una vez cuando se inicia la tarea.
             virtual void init()
             {
             }
@@ -110,6 +87,7 @@ namespace smooth::core
             void report_stack_status();
 
             const std::string name;
+
         private:
             void exec();
 
@@ -126,5 +104,6 @@ namespace smooth::core
             std::condition_variable start_condition{};
             smooth::core::timer::ElapsedTime status_report_timer{};
             std::vector<smooth::core::ipc::IPolledTaskQueue*> polled_queues{};
+
     };
 }
