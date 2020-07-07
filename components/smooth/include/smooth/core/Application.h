@@ -1,20 +1,3 @@
-/*
-Smooth - A C++ framework for embedded programming on top of Espressif's ESP-IDF
-Copyright 2019 Per Malmberg (https://gitbub.com/PerMalmberg)
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 #pragma once
 
 #include <vector>
@@ -28,29 +11,31 @@ limitations under the License.
 
 namespace smooth::core
 {
-    /// EarlyInit is used to initialize things that needs to be initialized before the Application.
+
+    /// EarlyInit es utilizada para inicializar los recursor que necesitan ser inicializados antes 
+    /// de la aplicacion.
     class EarlyInit : public Task
     {
         public:
             EarlyInit(uint32_t priority, const std::chrono::milliseconds& tick_interval);
-
             ~EarlyInit() override;
     };
 
-    /// The Application 'attaches' itself to the main task and gives the application programmer
-    /// the same possibilities to perform work on the main task as if a separate Task had been created.
-    /// Any application written based on Smooth should have an instance of the Application
-    /// class (or a class derived from Application) on the stack in its app_main().
-    /// Be sure to adjust the stack size of the main task accordingly using 'make menuconfig'.
-    /// Note: Unlike the version of start() in Task, when called on an Application instance start() never returns.
+    /// La aplicación se 'adjunta' a la tarea principal y le da al programador de la aplicación
+    /// las mismas posibilidades para realizar el trabajo en la tarea principal como si se hubiera creado una tarea separada.
+    /// Cualquier aplicación escrita basada en Smooth debe tener una instancia de la clase Aplicación
+    /// (o una clase derivada de la Aplicación) en la pila en su app_main().
+    /// Asegúrese de ajustar el tamaño de la pila de la tarea principal en consecuencia usando 'make menuconfig'.
+    /// Nota: a diferencia de la versión de start() en Task, cuando se llama en una instancia de Aplicación, start() nunca regresa.    
     class Application
         : public EarlyInit
     {
         public:
             /// Constructor
-            /// \param priority The priority to run at. Usually smooth::core::APPLICATION_BASE_PRIO
-            /// + an arbitrary value, but should be lower than the priority of the ESP-IDFs task
-            /// such as the Wifi driver.
+            /// \param priority la prioridad con la que se ejecutara.
+            /// Normalmente Usually smooth::core::APPLICATION_BASE_PRIO + un valor arbitrario,
+            /// pero deberia ser menor que la prioridad de las tareas ESP-IDF como la del 
+            /// driver de Wifi.
             /// \param tick_interval The tick interval
             Application(uint32_t priority, std::chrono::milliseconds tick_interval)
                     : EarlyInit(priority, tick_interval)
