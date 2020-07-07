@@ -1,6 +1,6 @@
-#include "example/lorawan/SCExampleLauncher.h"
+#include "example/njson/ExampleNJson.h"
 
 extern "C" void app_main(void)
 {
-    example::lorawan::launch();
+    example::njson::launch();
 }
