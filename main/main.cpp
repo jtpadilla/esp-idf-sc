@@ -1,6 +1,6 @@
-#include "example/simpletask/TestTask.h"
+#include "example/lorawan/SCExampleLauncher.h"
 
 extern "C" void app_main(void)
 {
-    example::simpletask::launch();
+    example::lorawan::launch();
 }
