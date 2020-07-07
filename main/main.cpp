@@ -1,9 +1,6 @@
-#include "example/starter_example/starter_example.h"
+#include "example/fmt/ExampleFmt.h"
 
-using namespace starter_example;
-
-extern "C" void app_main()
+extern "C" void app_main(void)
 {
-    App app{};
-    app.start();
+    example::fmt::launch();
 }

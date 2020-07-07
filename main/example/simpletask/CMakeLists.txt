@@ -3,6 +3,5 @@ idf_component_register(
         "main.cpp" 
         "example/simpletask/TestTask.cpp" 
         "example/simpletask/TestTask.h" 
-    REQUIRES os sys lorawan fmt nlohmann_json
-        
+    REQUIRES os sys
 )

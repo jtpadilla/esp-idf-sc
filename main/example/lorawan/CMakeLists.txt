@@ -7,6 +7,6 @@ idf_component_register(
         "example/lorawan/SCExampleLorawanTask.h" 
         "example/lorawan/SCExampleLauncher.cpp" 
         "example/lorawan/SCExampleLauncher.h" 
-    REQUIRES os sys lorawan fmt nlohmann_json
+    REQUIRES os sys lorawan
        
 )

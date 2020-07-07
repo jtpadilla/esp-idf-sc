@@ -4,6 +4,6 @@ idf_component_register(
         "example/njson/ExampleNJson.cpp" 
         "example/njson/ExampleNJson.h" 
 
-        REQUIRES os sys lorawan fmt nlohmann_json
+        REQUIRES nlohmann_json
         
 )
