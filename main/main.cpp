@@ -1,6 +1,9 @@
-#include "example/simpletask/TestTask.h"
+#include "example/starter_example/starter_example.h"
 
-extern "C" void app_main(void)
+using namespace starter_example;
+
+extern "C" void app_main()
 {
-    example::simpletask::launch();
+    App app{};
+    app.start();
 }

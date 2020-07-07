@@ -1,7 +1,7 @@
 idf_component_register(
     SRCS 
         "main.cpp" 
-        "example/simpletask/TestTask.cpp" 
-        "example/simpletask/TestTask.h" 
-    REQUIRES os sys
+        "example/starter_example/starter_example.cpp" 
+        "example/starter_example/starter_example.h" 
+    REQUIRES smooth
 )
