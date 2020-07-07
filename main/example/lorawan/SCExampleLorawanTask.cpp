@@ -106,7 +106,7 @@ namespace example::lorawan
             break;
         
         default:
-            ESP_LOGE(TAG, "DOWN-ERROR: Mensaje de %d bytes para el puerto %d que no esta soportado!", length, port);
+            //ESP_LOGE(TAG, "DOWN-ERROR: Mensaje de %d bytes para el puerto %d que no esta soportado!", length, port);
             break;
         }
 
