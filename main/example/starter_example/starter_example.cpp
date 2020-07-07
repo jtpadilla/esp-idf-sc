@@ -10,9 +10,12 @@ namespace starter_example
 {
     class ATask : public smooth::core::Task
     {
+
         public:
-            ATask() : smooth::core::Task("Task", 9000, APPLICATION_BASE_PRIO, std::chrono::seconds{ 1 })
-            {}
+            ATask() 
+                : smooth::core::Task("Task", 9000, APPLICATION_BASE_PRIO, std::chrono::seconds{ 1 })
+            {
+            }
 
             void init() override
             {
@@ -23,12 +26,13 @@ namespace starter_example
             {
                 Log::info("Task::tick", "Hola desde la tarea!");
             }
+
     };
 
     ATask a_instance{};
 
     App::App()
-            : Application(smooth::core::APPLICATION_BASE_PRIO, std::chrono::seconds(3))
+        : Application(smooth::core::APPLICATION_BASE_PRIO, std::chrono::seconds(3))
     {
     }
 
