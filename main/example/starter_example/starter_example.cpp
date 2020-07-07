@@ -11,12 +11,17 @@ namespace starter_example
     class ATask : public smooth::core::Task
     {
         public:
-            ATask() : smooth::core::Task("Other task", 9000, APPLICATION_BASE_PRIO, std::chrono::seconds{ 1 })
+            ATask() : smooth::core::Task("Task", 9000, APPLICATION_BASE_PRIO, std::chrono::seconds{ 1 })
             {}
+
+            void init() override
+            {
+                Log::info("Task::init", "Iniciando la tarea..");
+            }
 
             void tick() override
             {
-                Log::info("App::Init", "Hello from other task");
+                Log::info("Task::tick", "Hola desde la tarea!");
             }
     };
 
@@ -29,13 +34,14 @@ namespace starter_example
 
     void App::init()
     {
-        Log::info("App::Init", "Starting...");
+        Log::info("App::Init", "Iniciando la apliocacion..");
         a_instance.start();
     }
 
     void App::tick()
     {
-        Log::info("App", "Hello world!");
+        Log::info("App::Tick", "Hola desde la aplicacion!");
         SystemStatistics::instance().dump();
     }
+
 }

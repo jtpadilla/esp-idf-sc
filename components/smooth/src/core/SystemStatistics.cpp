@@ -17,13 +17,18 @@ namespace smooth::core
     TaskStats::TaskStats(uint32_t stack_size)
             : stack_size(stack_size)
     {
+        // Este constructor es invocado desde la propia tarea, por tanto 
+        // la llamada puede invocarse con 'nullptr'.
         high_water_mark = ::uxTaskGetStackHighWaterMark(nullptr);
     }
 
+    // Prepara el formato de la tabla de estadisticas d elas tareas
     static constexpr const char* dump_fmt = "{:>8} | {:>11} | {:>14} | {:>12} | {:>11} | {:>14} | {:>12}";
 
     void SystemStatistics::dump() const noexcept
     {
+
+        // Imprime estadisticas globales de la memoria
         Log::info(tag, "");
         Log::info(tag, dump_fmt,
             "Mem type",
@@ -49,9 +54,13 @@ namespace smooth::core
         dump_mem_stats("SPIRAM", MALLOC_CAP_SPIRAM);
 
         { 
-            // Only need to lock while accessing the shared data
+            // Obtiene el acceso esclusivo al mapa con las estadisticas de todas las tareas
             std::lock_guard<std::mutex> guard{ lock };
+
+            // Prepara el formato de la tabla de estadisticas d elas tareas
             constexpr const char* stack_format = "{:>16} | {:>10} | {:>15} | {:>15}";
+
+            // Imprime la cabecera
             Log::info(tag, "");
             Log::info(tag, stack_format, "Name", "Stack", "Min free stack", "Max used stack" );
             Log::info(tag, stack_format, 
@@ -63,6 +72,7 @@ namespace smooth::core
 
             for (const auto& stat : task_info)
             {
+                // Imprime las estadisticas de cada una de las tareas
                 Log::info(
                     tag,
                     stack_format,
@@ -71,6 +81,7 @@ namespace smooth::core
                     stat.second.get_high_water_mark(),
                     stat.second.get_stack_size() - stat.second.get_high_water_mark()
                 );
+
             }
             Log::info(tag, "");
         }
