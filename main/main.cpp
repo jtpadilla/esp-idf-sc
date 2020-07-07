@@ -1,6 +1,6 @@
-#include "example/fmt/ExampleFmt.h"
+#include "example/lorawan/SCExampleLauncher.h"
 
 extern "C" void app_main(void)
 {
-    example::fmt::launch();
+    example::lorawan::launch();
 }

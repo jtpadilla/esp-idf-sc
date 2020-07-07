@@ -7,7 +7,6 @@
 #include "freertos/task.h"
 
 #include "SCExampleLorawanTask.h"
-#include "GeneralUtils.h"
 
 namespace example::lorawan
 {
