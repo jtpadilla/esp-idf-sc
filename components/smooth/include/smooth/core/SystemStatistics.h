@@ -37,7 +37,6 @@ namespace smooth::core
     class SystemStatistics
     {
         public:
-            using synch = std::lock_guard<std::mutex>;
 
             static SystemStatistics& instance()
             {
@@ -48,7 +47,7 @@ namespace smooth::core
 
             void report(const std::string& task_name, TaskStats&& stats) noexcept
             {
-                synch guard{ lock };
+                std::lock_guard<std::mutex> guard{ lock };
                 task_info[task_name] = stats;
             }
 
