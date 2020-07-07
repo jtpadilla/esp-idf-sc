@@ -1,6 +1,9 @@
-#include "example/lorawan/SCExampleLauncher.h"
+#include "example/starter_example/starter_example.h"
 
-extern "C" void app_main(void)
+using namespace starter_example;
+
+extern "C" void app_main()
 {
-    example::lorawan::launch();
+    App app{};
+    app.start();
 }
