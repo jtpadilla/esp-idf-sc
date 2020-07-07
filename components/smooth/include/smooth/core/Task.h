@@ -33,6 +33,7 @@ namespace smooth::core
     /// la capacidad de recibir eventos de manera segura para subprocesos.
     class Task
     {
+        
         public:
             virtual ~Task();
 
@@ -106,4 +107,5 @@ namespace smooth::core
             std::vector<smooth::core::ipc::IPolledTaskQueue*> polled_queues{};
 
     };
+    
 }
