@@ -1,3 +1,0 @@
-set(CMAKE_C_COMPILER gcc-8)
-set(CMAKE_CXX_COMPILER g++-8)
-set(CMAKE_ASM_COMPILER gcc-8)
