@@ -1,20 +1,3 @@
-/*
-Smooth - A C++ framework for embedded programming on top of Espressif's ESP-IDF
-Copyright 2019 Per Malmberg (https://gitbub.com/PerMalmberg)
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
 #pragma GCC diagnostic ignored "-Wsign-conversion"
@@ -34,7 +17,7 @@ using namespace std::chrono;
 namespace smooth::core
 {
     EarlyInit::EarlyInit(uint32_t priority, const std::chrono::milliseconds& tick_interval)
-            : Task(priority, tick_interval)
+        : Task(priority, tick_interval)
     {
         // Place things here that needs to initialize early in the application startup.
         nvs_flash_init();
@@ -64,4 +47,5 @@ namespace smooth::core
             get_wifi().connect_to_ap();
         }
     }
+    
 }

@@ -51,5 +51,6 @@ namespace smooth::core
 
         private:
             network::Wifi wifi{};
+            
     };
 }

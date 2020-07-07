@@ -87,6 +87,7 @@ namespace smooth::core::network
             void start_softap(uint8_t max_conn = 1);
 
         private:
+        
             void connect() const;
 
             void close_if();
@@ -104,5 +105,7 @@ namespace smooth::core::network
             esp_netif_t* interface{ nullptr };
             esp_event_handler_instance_t instance_wifi_event{};
             esp_event_handler_instance_t instance_ip_event{};
+
     };
+
 }

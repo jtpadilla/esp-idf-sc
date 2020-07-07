@@ -1,20 +1,3 @@
-/*
-Smooth - A C++ framework for embedded programming on top of Espressif's ESP-IDF
-Copyright 2019 Per Malmberg (https://gitbub.com/PerMalmberg)
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 #include <utility>
 #include <algorithm>
 #include "smooth/core/Task.h"
@@ -22,10 +5,8 @@ limitations under the License.
 #include "smooth/core/ipc/Publisher.h"
 #include "smooth/core/SystemStatistics.h"
 
-#ifdef ESP_PLATFORM
 #include <esp_pthread.h>
 #include <freertos/task.h>
-#endif
 
 using namespace smooth::core::logging;
 
@@ -53,9 +34,7 @@ namespace smooth::core
               is_attached(true),
               affinity(tskNO_AFFINITY)
     {
-#ifdef ESP_PLATFORM
         stack_size = CONFIG_MAIN_TASK_STACK_SIZE;
-#endif
     }
 
     Task::~Task()
@@ -81,7 +60,6 @@ namespace smooth::core
             }
             else
             {
-#ifdef ESP_PLATFORM
 
                 // Since std::thread is implemented using pthread, setting the config before
                 // creating the std::thread we get the desired effect, even if we're not calling
@@ -98,7 +76,7 @@ namespace smooth::core
                 }
 
                 esp_pthread_set_cfg(&worker_config);
-#endif
+
                 Log::debug(name, "Creating worker thread");
                 worker = std::thread([this]() {
                                          this->exec();
@@ -199,6 +177,7 @@ namespace smooth::core
                 status_report_timer.reset();
             }
         }
+
     }
 
     void Task::register_queue_with_task(smooth::core::ipc::ITaskEventQueue* task_queue)
@@ -228,4 +207,5 @@ namespace smooth::core
     {
         SystemStatistics::instance().report(name, TaskStats{ stack_size });
     }
+    
 }
