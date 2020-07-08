@@ -92,6 +92,7 @@ namespace smooth::core
         private:
             void exec();
 
+            // Thread subyacente de la tarea
             std::thread worker;
 
             // Dimension del stack en bytes
