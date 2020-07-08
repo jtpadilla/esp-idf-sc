@@ -93,17 +93,35 @@ namespace smooth::core
             void exec();
 
             std::thread worker;
+
+            // Dimension del stack en bytes
             uint32_t stack_size;
+
+            // Prioridad de la nueva tarea
             uint32_t priority;
+
             std::chrono::milliseconds tick_interval;
-            smooth::core::ipc::QueueNotification notification{};
+
+            // El constructor informara este valor indicando si hay un nuevo thread o no
             bool is_attached;
+
+            // Core que se utilizara
             int affinity;
+
+            // Indica si la tarea ha sido iniciada
             std::atomic_bool started{ false };
+
+            // Mutex que permite sincronizar el arranque de las distintas tareas.
             std::mutex start_mutex{};
-            std::mutex queue_mutex{};
+
+            // El thread de la tarea puede comunicar al threda lanzador que ya esta iniciado.
             std::condition_variable start_condition{};
+
+            // Permite determinar cuando hay que actualizar las estadisticas de la tarea
             smooth::core::timer::ElapsedTime status_report_timer{};
+
+            smooth::core::ipc::QueueNotification notification{};
+            std::mutex queue_mutex{};
             std::vector<smooth::core::ipc::IPolledTaskQueue*> polled_queues{};
 
     };

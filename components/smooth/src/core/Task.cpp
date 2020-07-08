@@ -12,7 +12,8 @@ using namespace smooth::core::logging;
 
 namespace smooth::core
 {
-    /// Constructor used when creating a new task running on a new thread.
+    /// Constructor utilizado cuando se crea una nueva tarea ejecutandose
+    /// en un nuevo thread.
     Task::Task(std::string task_name, uint32_t stack_size, uint32_t priority,
                std::chrono::milliseconds tick_interval, int core)
             : name(std::move(task_name)),
@@ -25,7 +26,8 @@ namespace smooth::core
     {
     }
 
-    /// Constructor used when attaching to an already running thread.
+    /// Constructor utilizado cuando la nueva tarea se engancha al thread 
+    /// que ejecuta el constructor.
     Task::Task(uint32_t priority, std::chrono::milliseconds tick_interval)
             : name("MainTask"),
               stack_size(0),
@@ -44,54 +46,64 @@ namespace smooth::core
 
     void Task::start()
     {
+
+        // Obtiene el acceso esclusivo para poder iniciar el arranque de esta tarea
         std::unique_lock<std::mutex> lock{ start_mutex };
 
-        // Prevent multiple starts
+        // Evita multiples starts..
         if (!started)
         {
+
+            // Se inicia el timer para las actualizaciones de las estadisticas de la tarea
             status_report_timer.start();
 
             if (is_attached)
             {
                 Log::debug(name, "Running as attached thread");
 
-                // Attaching to another task, just run execute.
+                // En lugar de crear un nuevo thread, se ejecuta con el threda
+                // que a invocado este metodo.
                 exec();
             }
             else
             {
 
-                // Since std::thread is implemented using pthread, setting the config before
-                // creating the std::thread we get the desired effect, even if we're not calling
-                // pthread_create() as per the IDF documentation.
-                auto worker_config = esp_pthread_get_default_config();
+                // Se utilizara std::thread que esta implementado con pthread.
+                // Hay que gestionar la configuracion del sistema que es la utilizada 
+                // en el momento de crear el thread.
+
+                // Se obtiene la configuracion para los pthread que tiene el sistema
+                auto worker_config = ::esp_pthread_get_default_config();
+
+                // Se ajusta la configuracion a la requerida para el nuevo thread
                 worker_config.stack_size = stack_size;
                 worker_config.prio = priority;
                 worker_config.thread_name = name.c_str();
 
-                // Set to desired core, otherwise use default (as per config).
+                // Se se ha especificado un core se configura.
                 if (affinity != tskNO_AFFINITY)
                 {
                     worker_config.pin_to_core = affinity;
                 }
 
-                esp_pthread_set_cfg(&worker_config);
+                // Se establece la nueva configuracion del sistema para los threads
+                ::esp_pthread_set_cfg(&worker_config);
 
+                // Se inicia el nuevo thread para ejecutar la tarea
                 Log::debug(name, "Creating worker thread");
                 worker = std::thread([this]() {
                                          this->exec();
                 });
 
+                // Para evitar 'condiciones de carrera' entre las tareas 
+                // durante su inicio, siempre se espera que la tarea arranque.
                 Log::debug(name, "Waiting for worker to start");
-
-                // To avoid race conditions between tasks during start up,
-                // always wait for the new task to start.
                 start_condition.wait(lock,
                                      [this] {
                                          return started.load();
                                      });
-
                 Log::debug(name, "Worker started");
+                
             }
         }
     }
@@ -100,6 +112,7 @@ namespace smooth::core
     {
         Log::debug(name, "Executing...");
 
+        // Si se ha creado un nuevo thread, se le indica al llamante que ya se ha iniciado.
         if (!is_attached)
         {
             Log::debug(name, "Notify start_mutex");
@@ -171,11 +184,13 @@ namespace smooth::core
                 }
             }
 
+            // si han pasado 60 segundos desde la ultima actualizacion se actualiza de nuevo.
             if (status_report_timer.get_running_time() > std::chrono::seconds(60))
             {
                 report_stack_status();
                 status_report_timer.reset();
             }
+
         }
 
     }
