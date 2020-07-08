@@ -20,9 +20,9 @@ namespace smooth::core
               worker(),
               stack_size(stack_size),
               priority(priority),
-              tick_interval(tick_interval),
               is_attached(false),
-              affinity(core)
+              affinity(core),
+              tick_interval(tick_interval)
     {
     }
 
@@ -32,9 +32,9 @@ namespace smooth::core
             : name("MainTask"),
               stack_size(0),
               priority(priority),
-              tick_interval(tick_interval),
               is_attached(true),
-              affinity(tskNO_AFFINITY)
+              affinity(tskNO_AFFINITY),
+              tick_interval(tick_interval)
     {
         stack_size = CONFIG_MAIN_TASK_STACK_SIZE;
     }
