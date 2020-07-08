@@ -4,6 +4,7 @@ using namespace std::chrono;
 
 namespace smooth::core::timer
 {
+
     std::chrono::microseconds ElapsedTime::get_running_time()
     {
         if (active)
@@ -28,4 +29,5 @@ namespace smooth::core::timer
 
         return duration_cast<microseconds>(local_elapsed);
     }
+    
 }
