@@ -101,13 +101,14 @@ namespace smooth::core
             // Prioridad de la nueva tarea
             uint32_t priority;
 
-            std::chrono::milliseconds tick_interval;
-
             // El constructor informara este valor indicando si hay un nuevo thread o no
             bool is_attached;
 
             // Core que se utilizara
             int affinity;
+
+            // Cada cuanto tiempo se dispara el tick
+            std::chrono::milliseconds tick_interval;
 
             // Indica si la tarea ha sido iniciada
             std::atomic_bool started{ false };

@@ -121,21 +121,23 @@ namespace smooth::core
             start_condition.notify_all();
         }
 
+        // se llama al codigo de inicializacion del usuario
         Log::verbose(name, "Initializing...");
         init();
-
         Log::verbose(name, "Initialized");
 
+        // ElapsedTime que nos permite detectar el momnto de hacer un 'tick()'
         timer::ElapsedTime delayed{};
-
         delayed.start();
 
+        // Antes de empezar actualizamos las estadisticas de la tarea
         report_stack_status();
 
+        // Bucle infinito de la tarea
         for (;; )
         {
-            // Try to keep the tick alive even when there are lots of incoming messages
-            // by simply not checking the queues when more than one tick interval has passed.
+
+            // El tick tiene preferencia se le toca se ejecuta aunque hayan muchos mensajes  entrantes.
             if (tick_interval.count() > 0 && delayed.get_running_time() > tick_interval)
             {
                 tick();
