@@ -121,7 +121,7 @@ namespace smooth::core
             start_condition.notify_all();
         }
 
-        // se llama al codigo de inicializacion del usuario
+        // Se llama al codigo de inicializacion del usuario
         Log::verbose(name, "Initializing...");
         init();
         Log::verbose(name, "Initialized");
@@ -145,6 +145,8 @@ namespace smooth::core
             }
             else
             {
+
+                // Obtiene el acceso exclusivo a la cola
                 std::unique_lock<std::mutex> lock{ queue_mutex };
 
                 // Check the polled queues for data availability
@@ -184,6 +186,7 @@ namespace smooth::core
                         queue->forward_to_event_listener();
                     }
                 }
+                
             }
 
             // si han pasado 60 segundos desde la ultima actualizacion se actualiza de nuevo.
