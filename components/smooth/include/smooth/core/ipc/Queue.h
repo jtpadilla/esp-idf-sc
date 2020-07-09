@@ -1,20 +1,3 @@
-/*
-Smooth - A C++ framework for embedded programming on top of Espressif's ESP-IDF
-Copyright 2019 Per Malmberg (https://gitbub.com/PerMalmberg)
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 #pragma once
 
 #include <chrono>
@@ -28,21 +11,23 @@ using namespace smooth::core::logging;
 
 namespace smooth::core::ipc
 {
-    /// T Queue<T> is precisely what that name suggest - a queue that holds items of type T.
-    /// It is also thread-safe. It can be used either as a stand alone queue or as the base for
-    /// more specialized implementations, such as the TaskEventQueue and SubscribingTaskEventQueue.
-    /// Please note that this implementation supports actual C++ objects as opposed to the FreeRTOS
-    /// plain data-only queues. This means that you can place any type of C++ object on these queues
-    /// as long as the objects are copyable (the default copy constructor and assignment operator are enough)
-    /// Items are placed on the queue by copy, not by reference.
-    /// \tparam T The type of object to hold in the queue.
+
+    /// T Queue<T> es precisamente lo que el nombre sugiere - una cola que almacena items de tipo T.
+    /// Es segura para utilizarse desde distintos threads. Se puede utilizar como una 
+    /// cola independiante o como base para una cola mas especializada como TaskEventQueue y
+    /// SubscribingTaskEventQueue.
+    /// Esta cola soporta objetos reales C++ a diferencia de los datos planos de FreeRTOS.
+    /// Esto significa que puedes colocar en la cola cualquier tipo de objeto C++ simpre y cuando 
+    /// sean copiables (el contructor de copia y el operador de asignacion seran suficientes)
+    /// Los items son colocados en la cola por copia, no por referencia.
+    /// \tparam T El tipo de objeto a colocar en la cola.
     template<typename T>
     class Queue
     {
         public:
             /// Constructor
-            /// \param name The name of the queue, mainly used for debugging and logging.
-            /// \param size The size of the queue, i.e. the number of items it can hold.
+            /// \param name Nombre de la cola, utilizada para debug y log.
+            /// \param size Dimension de la cola, numero de items que puede almacenar.
             explicit Queue(int size)
                     : queue_size(size),
                       items(),
@@ -58,8 +43,7 @@ namespace smooth::core::ipc
                 items.clear();
             }
 
-            /// Gets the size of the queue.
-            /// \return number of items the queue can hold.
+            /// \return Obtiene la dimension de la cola
             int size()
             {
                 std::lock_guard<std::mutex> lock(guard);
@@ -67,9 +51,9 @@ namespace smooth::core::ipc
                 return queue_size;
             }
 
-            /// Pushes an item into the queue
-            /// \param item The item of which a copy will be placed on the queue.
-            /// \return true if the queue could accept the item, otherwise false.
+            /// Empuja un item dentro de la cola
+            /// \param item El item del cual un item sera puesto en la cola.
+            /// \return true si la cola a podido aceptar el item, false en caso contrario.
             bool push(const T& item)
             {
                 std::lock_guard<std::mutex> lock(guard);
@@ -84,9 +68,9 @@ namespace smooth::core::ipc
                 return res;
             }
 
-            /// Pops an item off the queue.
-            /// \param target A reference to an instance of T which will be assigned the item taken from the queue.
-            /// \return true if an item could be received, otherwise false.
+            /// Saca un elemento de la cola
+            /// \param target Una referencia a la instancia de T al que le sera asignado el item sacado de la cola..
+            /// \return true si el item a podido ser recibidi, false en caso contrario
             bool pop(T& target)
             {
                 std::lock_guard<std::mutex> lock(guard);
@@ -102,15 +86,15 @@ namespace smooth::core::ipc
                 return res;
             }
 
-            /// Returns a value indicating if the queue is empty.
-            /// \return true if empty, otherwise false.
+            /// Retorna un valor indicando si la cola esta vacia.
+            /// \return true si esta vacia, false en caso contrario.
             bool empty()
             {
                 return count() == 0;
             }
 
-            /// Returns the number of items waiting to be popped.
-            /// \return The number of items in the queue.
+            /// Retorna el numero de items que estan esperando a ser sacados.
+            /// \return Numero de items de la cola.
             int count()
             {
                 std::lock_guard<std::mutex> lock(guard);
@@ -122,5 +106,6 @@ namespace smooth::core::ipc
             const int queue_size;
             std::vector<T> items;
             std::mutex guard;
+            
     };
 }
