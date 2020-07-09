@@ -1,0 +1,52 @@
+classDiagram
+
+ITaskEventQueue <|.. TaskEventQueue
+Task <-- TaskEventQueue
+IEventListener~T~ <-- TaskEventQueue
+
+Queue~T~ <-- TaskEventQueue
+QueueNotification <-- TaskEventQueue
+
+
+class ITaskEventQueue {
+    <<interface>>
+    +forward_to_event_listener() void
+    +size() int
+    +register_notification(QueueNotification* notification) void
+}
+
+class TaskEventQueue~T~ {
+    #Queue<T> queue
+    #QueueNotification* notif = nullptr
+    -Task& task
+    -IEventListener<T>$ listener
+    ~TaskEventQueue()
+    +create(int size, Task& owner_task, IEventListener~T~& event_listener)$
+    +push(const T& item) bool
+    +size() int
+    +count() int
+    +register_notification(QueueNotification* notification) void
+    +clear() void
+    #TaskEventQueue(int size, Task& task, IEventListener~T~& listener)
+    #push_internal(const T& item, const std::weak_ptr<ITaskEventQueue>& receiver) bool
+    #shared_from_base() std::shared_ptr<Derived>
+    -forward_to_event_listener() void
+}
+
+class Queue~T~ {
+    +size() int
+}
+
+class QueueNotification {
+    +size() int
+}
+
+class IEventListener~T~ {
+    <<interface>>
+    +size() int
+}
+
+class Task {
+    +size() int
+}
+

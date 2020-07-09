@@ -89,10 +89,7 @@ namespace smooth::core::ipc
             /// \param listener The receiver of the events. Normally this is the same as the task, but it can be
             /// any object instance.
             TaskEventQueue(int size, Task& task, IEventListener<T>& listener)
-                    :
-                      queue(size),
-                      task(task),
-                      listener(listener)
+                : queue(size), task(task), listener(listener)
             {
                 task.register_queue_with_task(this);
             }
