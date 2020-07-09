@@ -19,25 +19,31 @@ namespace smooth::core
     EarlyInit::EarlyInit(uint32_t priority, const std::chrono::milliseconds& tick_interval)
         : Task(priority, tick_interval)
     {
-        // Place things here that needs to initialize early in the application startup.
+
+        // Colocal aqui las inicializaciones que hay que realizar antes de iniciar la aplicacion
         nvs_flash_init();
         gpio_install_isr_service(0);
         esp_event_loop_create_default();
 
-        // Set the number of allowed open files to something reasonable that might be
-        // used when running on the ESP. can be changed later.
+        // Se indica el numero maximo de ficheros que se permiten abrir (puede cambiarse despues)
         FSLock::set_limit(5);
+
     }
 
     EarlyInit::~EarlyInit()
     {
+
+        // Se detienen en oden inverso a como se realizo la inicializacion
         esp_event_loop_delete_default();
         gpio_uninstall_isr_service();
         nvs_flash_deinit();
+        
     }
 
     void Application::init()
     {
+
+        // Se inicia elsocket dispatcher 
         // Start socket dispatcher first of all so that it is
         // ready to receive network status events.
         network::SocketDispatcher::instance();
@@ -46,6 +52,7 @@ namespace smooth::core
         {
             get_wifi().connect_to_ap();
         }
+
     }
     
 }
