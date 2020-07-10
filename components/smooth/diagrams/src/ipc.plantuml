@@ -1,0 +1,71 @@
+@startuml ipc
+
+scale 2
+
+
+interface ITaskEventQueue {
+    +forward_to_event_listener() void
+    +size() int
+    +register_notification(QueueNotification* notification) void
+}
+
+class TaskEventQueue<T> {
+    #Queue<T> queue
+    #QueueNotification* notif = nullptr
+    -Task& task
+    -IEventListener<T>$ listener
+    ~TaskEventQueue()
+    {static} +create(int size, Task& owner_task, IEventListener~T~& event_listener)
+    +push(const T& item): bool
+    +size(): int
+    +count(): int
+    +register_notification(QueueNotification* notification): void
+    +clear(): void
+    #TaskEventQueue(int size, Task& task, IEventListener~T~& listener)
+    #push_internal(const T& item, const std::weak_ptr<ITaskEventQueue>& receiver): bool
+    #shared_from_base(): std::shared_ptr<Derived>
+    -forward_to_event_listener(): void
+}
+
+class Queue<T> {
+    +size(): int
+}
+
+class QueueNotification {
+    +size(): int
+}
+
+interface IEventListener<T> {
+    +size(): int
+}
+
+class Task {
+
+    +~Task()
+    +start(): void
+    +register_queue_with_task(ITaskEventQueue* task_queue): void
+    +register_polled_queue_with_task(IPolledTaskQueue* polled_queue): void
+    +unregister_polled_queue_with_task(IPolledTaskQueue* polled_queue): void
+
+    #name std::string
+    #Task(uint32_t priority, std::chrono::milliseconds tick_interval)
+    #Task(std::string task_name, uint32_t stack_size, uint32_t priority, std::chrono::milliseconds tick_interval, int core)
+    #virtual tick(): void
+    #virtual init(): void
+    #report_stack_status(): void
+
+    -worker std::thread
+    -stack_size uint32_t
+    -priority uint32_t
+    -bool is_attached
+
+}
+
+class TaskEventQueue implements ITaskEventQueue
+Task <-- TaskEventQueue
+IEventListener <-- TaskEventQueue
+
+Queue <-- TaskEventQueue
+QueueNotification <-- TaskEventQueue
+
+@enduml
