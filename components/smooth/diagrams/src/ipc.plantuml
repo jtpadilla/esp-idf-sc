@@ -14,14 +14,14 @@ class TaskEventQueue<T> {
     #QueueNotification* notif = nullptr
     -Task& task
     -IEventListener<T>$ listener
-    ~TaskEventQueue()
+    +~TaskEventQueue()
     {static} +create(int size, Task& owner_task, IEventListener~T~& event_listener)
     +push(const T& item): bool
     +size(): int
     +count(): int
     +register_notification(QueueNotification* notification): void
     +clear(): void
-    #TaskEventQueue(int size, Task& task, IEventListener~T~& listener)
+    #TaskEventQueue(int size, Task& task, IEventListener<T>& listener)
     #push_internal(const T& item, const std::weak_ptr<ITaskEventQueue>& receiver): bool
     #shared_from_base(): std::shared_ptr<Derived>
     -forward_to_event_listener(): void
@@ -40,25 +40,30 @@ interface IEventListener<T> {
 }
 
 class Task {
-
     +~Task()
     +start(): void
     +register_queue_with_task(ITaskEventQueue* task_queue): void
     +register_polled_queue_with_task(IPolledTaskQueue* polled_queue): void
     +unregister_polled_queue_with_task(IPolledTaskQueue* polled_queue): void
-
     #name std::string
     #Task(uint32_t priority, std::chrono::milliseconds tick_interval)
     #Task(std::string task_name, uint32_t stack_size, uint32_t priority, std::chrono::milliseconds tick_interval, int core)
     #virtual tick(): void
     #virtual init(): void
     #report_stack_status(): void
-
     -worker std::thread
     -stack_size uint32_t
     -priority uint32_t
     -bool is_attached
-
+    -int affinity;
+    -std::chrono::milliseconds tick_interval;
+    -std::atomic_bool started{ false };
+    -std::mutex start_mutex{};
+    -std::condition_variable start_condition{};
+    -smooth::core::timer::ElapsedTime status_report_timer{};
+    -QueueNotification notification{};
+    -std::mutex queue_mutex{};
+    -std::vector<IPolledTaskQueue*> polled_queues{};
 }
 
 class TaskEventQueue implements ITaskEventQueue
