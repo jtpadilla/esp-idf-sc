@@ -55,6 +55,7 @@ namespace smooth::core
             Task& operator=(Task&&) = delete;
 
         protected:
+        
             // Usa este constructor para unirse a una terea existente (ej: la terea principal)
             /// \param priority Prioridad de la tarea
             /// \param tick_interval Intervaloe del Tick
@@ -90,6 +91,7 @@ namespace smooth::core
             const std::string name;
 
         private:
+
             void exec();
 
             // Thread subyacente de la tarea

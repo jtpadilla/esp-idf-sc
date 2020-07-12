@@ -19,7 +19,8 @@ namespace smooth::core::util
             public:
                 explicit CreationWrapper(Args&& ... args)
                         : T(std::forward<Args>(args)...)
-                {}
+                {
+                }
         };
 
         return std::make_shared<CreationWrapper>(std::forward<Args>(args)...);
@@ -37,7 +38,8 @@ namespace smooth::core::util
             public:
                 explicit CreationWrapper(Args&& ... args)
                         : T(std::forward<Args>(args)...)
-                {}
+                {
+                }
         };
 
         return std::make_unique<CreationWrapper>(std::forward<Args>(args)...);

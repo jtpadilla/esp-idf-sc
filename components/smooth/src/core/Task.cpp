@@ -16,25 +16,25 @@ namespace smooth::core
     /// en un nuevo thread.
     Task::Task(std::string task_name, uint32_t stack_size, uint32_t priority,
                std::chrono::milliseconds tick_interval, int core)
-            : name(std::move(task_name)),
-              worker(),
-              stack_size(stack_size),
-              priority(priority),
-              is_attached(false),
-              affinity(core),
-              tick_interval(tick_interval)
+        :   name(std::move(task_name)),
+            worker(),
+            stack_size(stack_size),
+            priority(priority),
+            is_attached(false),
+            affinity(core),
+            tick_interval(tick_interval)
     {
     }
 
     /// Constructor utilizado cuando la nueva tarea se engancha al thread 
     /// que ejecuta el constructor.
     Task::Task(uint32_t priority, std::chrono::milliseconds tick_interval)
-            : name("MainTask"),
-              stack_size(0),
-              priority(priority),
-              is_attached(true),
-              affinity(tskNO_AFFINITY),
-              tick_interval(tick_interval)
+        :   name("MainTask"),
+            stack_size(0),
+            priority(priority),
+            is_attached(true),
+            affinity(tskNO_AFFINITY),
+            tick_interval(tick_interval)
     {
         stack_size = CONFIG_MAIN_TASK_STACK_SIZE;
     }

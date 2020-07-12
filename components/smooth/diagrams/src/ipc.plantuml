@@ -28,11 +28,26 @@ class TaskEventQueue<T> {
 }
 
 class Queue<T> {
+    -const int queue_size;
+    -std::vector<T> items;
+    -std::mutex guard;
+    +explicit Queue(int size)
+    +virtual ~Queue()
     +size(): int
+    +push(const T& item): bool
+    +pop(T& target): bool
 }
 
 class QueueNotification {
-    +size(): int
+    -std::deque<std::weak_ptr<ITaskEventQueue>> queues{}
+    -std::mutex guard{}
+    -std::condition_variable cond{}
+    +notify(const std::weak_ptr<ITaskEventQueue>& queue): void
+    +remove_expired_queues(): void
+    +wait_for_notification(std::chrono::milliseconds timeout): std::weak_ptr<ITaskEventQueue>
+    +clear(): void
+    +empty(): bool
+    +count(): int
 }
 
 interface IEventListener<T> {
@@ -67,6 +82,7 @@ class Task {
 }
 
 class TaskEventQueue implements ITaskEventQueue
+Task *-- QueueNotification
 Task <-- TaskEventQueue
 IEventListener <-- TaskEventQueue
 

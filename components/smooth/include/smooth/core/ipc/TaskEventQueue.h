@@ -16,10 +16,10 @@ namespace smooth::core::ipc
     /// \tparam T El tipo de eventos quq se recibira.
     template<typename T>
     class TaskEventQueue
-        : public ITaskEventQueue,
-        public std::enable_shared_from_this<TaskEventQueue<T>>
+        : public ITaskEventQueue, public std::enable_shared_from_this<TaskEventQueue<T>>
     {
         public:
+
             friend core::Task;
 
             static_assert(std::is_default_constructible<T>::value, "DataType must be default-constructible");
@@ -35,14 +35,12 @@ namespace smooth::core::ipc
                 notif->remove_expired_queues();
             }
 
+            // Se suprimen el constructor por defecto, contructor copia, operador de asinacion
+            // costructor move y copia move.
             TaskEventQueue() = delete;
-
             TaskEventQueue(const TaskEventQueue&) = delete;
-
             TaskEventQueue(TaskEventQueue&&) = delete;
-
             TaskEventQueue& operator=(const TaskEventQueue&) = delete;
-
             TaskEventQueue& operator=(const TaskEventQueue&&) = delete;
 
             /// Empuja un item en la cola
@@ -60,8 +58,8 @@ namespace smooth::core::ipc
                 return queue.size();
             }
 
-            /// Returns the number of items waiting to be popped.
-            /// \return The number of items in the queue.
+            // Retorna el numero de items que estan esperando a ser recuperados
+            /// \return El numero de itmes en la cola
             int count()
             {
                 return queue.count();
@@ -82,12 +80,12 @@ namespace smooth::core::ipc
             }
 
         protected:
+
             /// Constructor
-            /// \param name The name of the event queue, mainly used for debugging and logging.
-            /// \param size The size of the queue, i.e. the number of items it can hold.
-            /// \param task The Task to which to signal when an event is available.
-            /// \param listener The receiver of the events. Normally this is the same as the task, but it can be
-            /// any object instance.
+            /// \param size Numero de items que puede almacenar la cola.
+            /// \param task Tarea a la que se le senyalara cuando un evento esta disponible
+            /// \param listener El receptor de los eventos. Normalmente es el mismo que la 
+            /// tarea pero puede ser cualquier instcna de un objeto.
             TaskEventQueue(int size, Task& task, IEventListener<T>& listener)
                 : queue(size), task(task), listener(listener)
             {
@@ -114,11 +112,14 @@ namespace smooth::core::ipc
 
             Queue<T> queue;
             QueueNotification* notif = nullptr;
+
         private:
+
             void forward_to_event_listener() override
             {
-                // All messages passed via a queue needs a default constructor
-                // and must be copyable and have the assignment operator.
+
+                // Todos lso mensajes pasados a una cola necesitan un contructor por defecto
+                // y tiene que ser copiables y tener un operador de asignacion.
                 T m;
 
                 if (queue.pop(m))
@@ -129,6 +130,7 @@ namespace smooth::core::ipc
 
             Task& task;
             IEventListener<T>& listener;
+
     };
 
 }
