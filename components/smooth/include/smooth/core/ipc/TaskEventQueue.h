@@ -10,10 +10,10 @@
 namespace smooth::core::ipc
 {
 
-    /// TaskEventQueue expands the functionality of the Queue<T> by, together with the Task, adding the ability
-    /// to signal a Task when an item is available, making polling a queue unnecessary which frees up the task
-    /// to do other things.
-    /// \tparam T The type of events to receive.
+    /// TaskEventQueue expande la funcionalidad de Queue<T>, junto con la Task, agregando la capacidad
+    /// para señalar una Task cuando un elemento está disponible, haciendo innecesario el sondeo 
+    /// de una Queue, lo que libera la tarea para hacer otras cosas.
+    /// \tparam T El tipo de eventos quq se recibira.
     template<typename T>
     class TaskEventQueue
         : public ITaskEventQueue,
@@ -45,16 +45,16 @@ namespace smooth::core::ipc
 
             TaskEventQueue& operator=(const TaskEventQueue&&) = delete;
 
-            /// Pushes an item into the queue
-            /// \param item The item of which a copy will be placed on the queue.
-            /// \return true if the queue could accept the item, otherwise false.
+            /// Empuja un item en la cola
+            /// \param item El item del cual una copia sera puesta en la cola.
+            /// \return true si la cola a aceptado el item, false en caso contrario.
             virtual bool push(const T& item)
             {
                 return push_internal(item, this->shared_from_this());
             }
 
-            /// Gets the size of the queue.
-            /// \return number of items the queue can hold.
+            /// Obtiene el numero de items que la cola puede almacenar.
+            /// \return numero de items que la cola puede almacenar.
             int size() override
             {
                 return queue.size();
