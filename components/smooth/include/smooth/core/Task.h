@@ -50,7 +50,7 @@ namespace smooth::core
 
         protected:
         
-            // Usa este constructor para unirse a una terea existente (ej: la terea principal)
+            // Usa este constructor para unirse a una terea existente (ej: la tarea principal)
             /// \param priority Prioridad de la tarea
             /// \param tick_interval Intervaloe del Tick
             Task(uint32_t priority, std::chrono::milliseconds tick_interval);

@@ -135,11 +135,17 @@ namespace smooth::core
             // El tick tiene preferencia se le toca se ejecuta aunque hayan muchos mensajes  entrantes.
             if (tick_interval.count() > 0 && delayed.get_running_time() > tick_interval)
             {
+                // Ya toca tick!
+                // Da igual que hayan eventos pendientes.
                 tick();
                 delayed.reset();
+
             }
             else
             {
+
+                // No toca tick!
+                // Podemos dedicarnos a lso eventos..
 
                 // Obtiene el acceso exclusivo a la cola
                 std::unique_lock<std::mutex> lock{ queue_mutex };
@@ -195,6 +201,12 @@ namespace smooth::core
 
     }
 
+    // Cuando de crea una instancia de TaskEventQueue, esta se crea asociada a una Task.
+    // El constructos de TaskEventQueue recibe como parametro la Task con la que se asocia,
+    // pero la referencia a la Task no se almacena, simplemente el constructor de TaskEventQueue
+    // invoca este metodo pasando su propia referencia (this) para que la Task finalice
+    // la configuracion de TaskEventQueue enlazandolo con el correspondiente QueueNotification
+    // que corresponde a esta Task.
     void Task::register_queue_with_task(smooth::core::ipc::ITaskEventQueue* task_queue)
     {
         task_queue->register_notification(&notification);

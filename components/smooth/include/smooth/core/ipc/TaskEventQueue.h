@@ -118,7 +118,7 @@ namespace smooth::core::ipc
             void forward_to_event_listener() override
             {
 
-                // Todos lso mensajes pasados a una cola necesitan un contructor por defecto
+                // Todos los mensajes pasados a una cola necesitan un contructor por defecto
                 // y tiene que ser copiables y tener un operador de asignacion.
                 T m;
 
