@@ -91,17 +91,12 @@ namespace smooth::core
 
                 // Se inicia el nuevo thread para ejecutar la tarea
                 Log::debug(name, "Creating worker thread");
-                worker = std::thread([this]() {
-                                         this->exec();
-                });
+                worker = std::thread([this]() {this->exec();});
 
                 // Para evitar 'condiciones de carrera' entre las tareas 
                 // durante su inicio, siempre se espera que la tarea arranque.
                 Log::debug(name, "Waiting for worker to start");
-                start_condition.wait(lock,
-                                     [this] {
-                                         return started.load();
-                                     });
+                start_condition.wait(lock, [this] { return started.load(); });
                 Log::debug(name, "Worker started");
                 
             }
@@ -116,8 +111,8 @@ namespace smooth::core
         if (!is_attached)
         {
             Log::debug(name, "Notify start_mutex");
-            started = true;
             std::unique_lock<std::mutex> lock{ start_mutex };
+            started = true;
             start_condition.notify_all();
         }
 

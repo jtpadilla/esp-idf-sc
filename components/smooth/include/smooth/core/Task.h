@@ -39,19 +39,13 @@ namespace smooth::core
 
             /// Empieza la tarea
             void start();
-
             void register_queue_with_task(smooth::core::ipc::ITaskEventQueue* task_queue);
-
             void register_polled_queue_with_task(smooth::core::ipc::IPolledTaskQueue* polled_queue);
-
             void unregister_polled_queue_with_task(smooth::core::ipc::IPolledTaskQueue* polled_queue);
 
             Task(const Task&) = delete;
-
             Task& operator=(const Task&) = delete;
-
             Task(Task&&) = delete;
-
             Task& operator=(Task&&) = delete;
 
         protected:

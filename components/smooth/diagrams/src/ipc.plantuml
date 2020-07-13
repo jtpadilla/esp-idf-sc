@@ -71,14 +71,15 @@ class Task {
     -priority uint32_t
     -bool is_attached
     -int affinity;
-    -std::chrono::milliseconds tick_interval;
-    -std::atomic_bool started{ false };
-    -std::mutex start_mutex{};
-    -std::condition_variable start_condition{};
-    -smooth::core::timer::ElapsedTime status_report_timer{};
-    -QueueNotification notification{};
-    -std::mutex queue_mutex{};
-    -std::vector<IPolledTaskQueue*> polled_queues{};
+    -std::chrono::milliseconds tick_interval
+    -std::atomic_bool started{ false }
+    -std::mutex start_mutex{}
+    -std::condition_variable start_condition{}
+    -smooth::core::timer::ElapsedTime status_report_timer{}
+    -QueueNotification notification{}
+    -std::mutex queue_mutex{}
+    -std::vector<IPolledTaskQueue*> polled_queues{}
+    -exec(): void
 }
 
 class TaskEventQueue implements ITaskEventQueue
