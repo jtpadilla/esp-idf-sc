@@ -9,8 +9,7 @@ namespace task_event_queue
 {
     using ElapsedTimeQueue = smooth::core::ipc::TaskEventQueue<smooth::core::timer::ElapsedTime>;
 
-    class SenderTask
-        : public smooth::core::Task
+    class SenderTask : public smooth::core::Task
     {
         public:
             explicit SenderTask(std::weak_ptr<ElapsedTimeQueue> out);
@@ -21,14 +20,13 @@ namespace task_event_queue
             std::weak_ptr<smooth::core::ipc::TaskEventQueue<smooth::core::timer::ElapsedTime>> out;
     };
 
-    class App
-        : public smooth::core::Application,
-        public smooth::core::ipc::IEventListener<smooth::core::timer::ElapsedTime>
+    class App : public smooth::core::Application, public smooth::core::ipc::IEventListener<smooth::core::timer::ElapsedTime>
     {
         public:
             App();
 
             void init() override;
+            void tick() override;
 
             uint32_t count = 0;
             std::chrono::microseconds total = std::chrono::microseconds(0);
