@@ -36,7 +36,6 @@ namespace smooth::core
 
     void Application::init()
     {
-
     }
     
 }
