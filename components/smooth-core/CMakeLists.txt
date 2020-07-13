@@ -12,7 +12,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
 )
 
 set(COMPONENT_REQUIRES
-    nvs_flash sdmmc vfs fatfs pthread mbedtls fmt 
+    nvs_flash pthread mbedtls fmt 
 )
 
 register_component()

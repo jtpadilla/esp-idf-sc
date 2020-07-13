@@ -34,7 +34,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
 set(COMPONENT_REQUIRES
     nvs_flash sdmmc vfs fatfs pthread libsodium mbedtls fmt smooth-core nlohmann_json
 )
-# Antes alguien necesitaba -> libsodium
+# Antes alguien necesitaba -> libsodium 
 
 register_component()
 
