@@ -1,0 +1,10 @@
+menu "Smooth-core"
+
+config SMOOTH_TIMER_SERVICE_STACK_SIZE
+    int "Timer Service stack size"
+    range 2048 4069
+    default 3072
+    help
+        Stack size for the Timer Service.
+
+endmenu

@@ -3,5 +3,5 @@ idf_component_register(
         "main.cpp" 
         "example/starter_example/starter_example.cpp" 
         "example/starter_example/starter_example.h" 
-    REQUIRES smooth
+    REQUIRES smooth-core
 )
