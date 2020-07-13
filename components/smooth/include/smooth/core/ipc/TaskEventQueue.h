@@ -1,7 +1,8 @@
 #pragma once
 
-#include "smooth/core/Task.h"
 #include <memory>
+
+#include "smooth/core/Task.h"
 #include "ITaskEventQueue.h"
 #include "IEventListener.h"
 #include "QueueNotification.h"
