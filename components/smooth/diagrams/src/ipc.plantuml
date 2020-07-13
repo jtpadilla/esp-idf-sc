@@ -14,8 +14,8 @@ class TaskEventQueue<T> {
     #QueueNotification* notif = nullptr
     -Task& task
     -IEventListener<T>$ listener
-    +~TaskEventQueue()
     {static} +create(int size, Task& owner_task, IEventListener~T~& event_listener)
+    +~TaskEventQueue()
     +push(const T& item): bool
     +size(): int
     +count(): int
@@ -82,12 +82,11 @@ class Task {
     -exec(): void
 }
 
-class TaskEventQueue implements ITaskEventQueue
 Task *-- QueueNotification
-Task <-- TaskEventQueue
-IEventListener <-- TaskEventQueue
 
-Queue <-- TaskEventQueue
-QueueNotification <-- TaskEventQueue
+TaskEventQueue implements ITaskEventQueue
+TaskEventQueue *-- Queue
+TaskEventQueue --> QueueNotification
+TaskEventQueue --> IEventListener
 
 @enduml

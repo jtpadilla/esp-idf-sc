@@ -14,10 +14,9 @@ namespace smooth::core::ipc
     /// TaskEventQueue expande la funcionalidad de Queue<T>, junto con la Task, agregando la capacidad
     /// para señalar una Task cuando un elemento está disponible, haciendo innecesario el sondeo 
     /// de una Queue, lo que libera la tarea para hacer otras cosas.
-    /// \tparam T El tipo de eventos quq se recibira.
+    /// \tparam T El tipo de eventos que se recibira.
     template<typename T>
-    class TaskEventQueue
-        : public ITaskEventQueue, public std::enable_shared_from_this<TaskEventQueue<T>>
+    class TaskEventQueue : public ITaskEventQueue, public std::enable_shared_from_this<TaskEventQueue<T>>
     {
         public:
 
