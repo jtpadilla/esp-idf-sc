@@ -11,14 +11,12 @@ namespace smooth::core::ipc
     class QueueNotification
     {
         public:
-            QueueNotification() = default;
 
+            QueueNotification() = default;
             ~QueueNotification() = default;
 
             void notify(const std::weak_ptr<ITaskEventQueue>& queue);
-
             void remove_expired_queues();
-
             std::weak_ptr<ITaskEventQueue> wait_for_notification(std::chrono::milliseconds timeout);
 
             void clear()

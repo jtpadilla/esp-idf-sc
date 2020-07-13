@@ -26,6 +26,12 @@ class TaskEventQueue<T> {
     #shared_from_base(): std::shared_ptr<Derived>
     -forward_to_event_listener(): void
 }
+note left
+Cada vez que <b>TaskEventQueue</b> recibe un evento 
+se inserta una referencia de la propia <b>TaskEventQueue</b>
+en la lista de <b>QueueNotification</b> que forma parte 
+de la tarea a la que se asigno la <b>TaskEventQueue</b>.
+end note
 
 class Queue<T> {
     -const int queue_size;
@@ -82,11 +88,13 @@ class Task {
     -exec(): void
 }
 
-Task *-- QueueNotification
+Task "1" *-- "1" QueueNotification
 
 class TaskEventQueue implements ITaskEventQueue
-TaskEventQueue *-- Queue
+TaskEventQueue "1" *-- "1" Queue
 TaskEventQueue --> QueueNotification
 TaskEventQueue --> IEventListener
+
+QueueNotification "1" *-- "N" TaskEventQueue
 
 @enduml
