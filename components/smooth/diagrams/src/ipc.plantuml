@@ -84,7 +84,7 @@ class Task {
 
 Task *-- QueueNotification
 
-TaskEventQueue implements ITaskEventQueue
+class TaskEventQueue implements ITaskEventQueue
 TaskEventQueue *-- Queue
 TaskEventQueue --> QueueNotification
 TaskEventQueue --> IEventListener
